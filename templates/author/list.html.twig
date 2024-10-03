@@ -1,0 +1,15 @@
+{% if authors is not empty %}
+    <h3> We have {{authors |length }} main authors : </h3>
+    <ul>
+        {% for author in authors %}
+            <li>
+            <img src="{{ asset('images/' ~ author.picture) }}" alt="{{ author.username }}" width="50px" height="50px">
+            {{ author.username| upper }} ({{ author.nb_books }} books)
+            <a href="{{ path('app_author_details', {id: author.id}) }}">Details</a>
+            </li>
+            
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No authors available.</p>
+{% endif %}
