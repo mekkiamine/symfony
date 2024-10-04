@@ -5,18 +5,15 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use App\Repository\AuthorRepository;
 
 class AuthorController extends AbstractController
 {
-    private array $authors;
+    private $AuthorRepository;
 
-    public function __construct()
+    public function __construct(AuthorRepository $authorRepository)
     {
-        $this->authors = array(
-            array('id' => 1, 'picture' => 'Victor-Hugo.jpeg', 'username' => 'Victor Hugo', 'email' => 'victor.hugo@gmail.com', 'nb_books' => 100),
-            array('id' => 2, 'picture' => 'william-shakespeare.jpeg', 'username' => 'William Shakespeare', 'email' => 'william.shakespeare@gmail.com', 'nb_books' => 200),
-            array('id' => 3, 'picture' => 'Taha_Hussein.jpeg', 'username' => 'Taha Hussein', 'email' => 'taha.hussein@gmail.com', 'nb_books' => 300),
-        );
+       $this->AuthorRepository=$authorRepository;
     }
 
     #[Route('/author', name: 'app_author')]
@@ -39,10 +36,11 @@ class AuthorController extends AbstractController
     #[Route('/ListAuthors', name: 'app_ListAuthors')]
     public function ListAuthors(): Response
     {
-        
+            $authors=$this->AuthorRepository->findAllAuthors();
+
             return $this->render('author/list.html.twig', [
                 'controller_name' => 'AuthorController',
-                'authors' => $this->authors
+                'authors' => $authors
             ]);
         
     }
@@ -50,16 +48,10 @@ class AuthorController extends AbstractController
     #[Route('/details/{id}', name: 'app_author_details')]
     public function AuthorDetails(int $id): Response
     {
-        $index = $id - 1;
-
-        if (isset($this->authors[$index])) {
-            $author = $this->authors[$index];
-    
+        $author=$this->AuthorRepository->findDetail($id);
+        
             return $this->render('author/author.html.twig', [
                 'author' => $author
             ]);
-        } else {
-            return new Response("Author not found", 404);
-        }
     }
 }

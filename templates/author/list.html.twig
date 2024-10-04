@@ -3,8 +3,8 @@
     <ul>
         {% for author in authors %}
             <li>
-            <img src="{{ asset('images/' ~ author.picture) }}" alt="{{ author.username }}" width="50px" height="50px">
-            {{ author.username| upper }} ({{ author.nb_books }} books)
+            <img src="{{ asset('images/' ~ author.picture) }}" alt="{{ author.nom }}" width="50px" height="50px">
+            {{ author.nom| upper }} ({{ author.getNbBooks() }} books)
             <a href="{{ path('app_author_details', {id: author.id}) }}">Details</a>
             </li>
             
